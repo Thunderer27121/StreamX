@@ -5,15 +5,16 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useChannel } from "../contexts/channelContext";
 import { useUser } from "../contexts/usercontext";
+import { QueryClient, useQueryClient } from "@tanstack/react-query";
 
 export default function CreateChannelModal({ isOpen, setisOpen}) {
   const navigate = useNavigate();
+  const queryclient = useQueryClient();
   const [name, setName] = useState("");
   const [handle, setHandle] = useState("");
   const [description, setDescription] = useState("");
   const {user} = useUser();
   const {googleId, email , picture} = user;
-  const {getChannel} = useChannel();
 
   const oncreate = async () => {
   try {
@@ -26,11 +27,12 @@ export default function CreateChannelModal({ isOpen, setisOpen}) {
 
     if (response.data.error) {
       toast.error(response.data.error);
+      console.log(response.data.error);
     } else {
+      queryclient.invalidateQueries("channel");
       toast.success("Channel created successfully");
       navigate("/mychannel");
       setisOpen(false);
-      getChannel();
     }
   } catch (error) {
     console.error(error);

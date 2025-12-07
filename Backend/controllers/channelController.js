@@ -25,7 +25,7 @@ export async function createchannel(req, res){
          profilePictureUrl : picture
         })
     if(!channel){
-        return res.json({message : "failed to create channel, Try again!"})
+        return res.json({error : "failed to create channel, Try again!"})
     }
     res.json({channel});
 
