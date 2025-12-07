@@ -1,4 +1,4 @@
-// controllers/channelController.js
+
 import cloudinary from "../db/cloudinary.js";
 import Channel from "../models/channelModal.js";
 import Video from "../models/videomodal.js";

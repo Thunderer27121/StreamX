@@ -12,6 +12,6 @@ const upload = multer({
 });
 
 router.put("/:id", upload.single("profilePicture"), updateChannel);
-router.delete("/delete/:id",  deleteChannel);
+router.delete("/delete/:channelId",  deleteChannel);
 
 export default router;
