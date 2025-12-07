@@ -354,14 +354,14 @@ const StreamXChannelPage = () => {
             </div>
 
             {/* Modal Footer */}
-            <div className="px-6 py-2.5 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 rounded-lg font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+            <div className="sticky bottom-0 bg-gradient-to-r from-gray-900 to-black border-t border-gray-700 p-6 flex justify-end gap-3 z-10">
               <button
                 onClick={ () =>
                  deleteChannel(channel?._id)}
                 disabled={deleteChannelPending}
                 className="px-4 py-2 bg-red-600 text-white rounded-md"
               >
-                {isPending ? "Deleting..." : "Delete Channel"}
+                {deleteChannelPending ? "Deleting..." : "Delete Channel"}
               </button>
               <button
                 onClick={() => setIsEditModalOpen(false)}
