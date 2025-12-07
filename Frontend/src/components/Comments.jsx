@@ -123,7 +123,7 @@ export default function Comments({ videoId, user, videoChannelId, googleId }) {
                 animate={{ opacity: 1, y: 0 }}
               >
                 <img
-                  src={`${import.meta.env.VITE_api_base_url}/api/auth/profile-pfp/${c.user}`}
+                  src={`${c?.user_avatar}`}
                   alt={c.user_name}
                   className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex-shrink-0"
                 />
