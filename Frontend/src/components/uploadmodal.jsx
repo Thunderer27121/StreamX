@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { useChannel } from "../contexts/channelContext";
 import { useQueryClient } from "@tanstack/react-query";
+import { useUser } from "../contexts/usercontext";
 
 export default function UploadModal({ onClose }) {
   const [title, setTitle] = useState("");
@@ -14,6 +15,7 @@ export default function UploadModal({ onClose }) {
   const [progress, setProgress] = useState(0);
   const [category, setcategory] = useState("");
   const {channel}= useChannel();
+  const user = useUser();
   const queryclient = useQueryClient();
 
 const handleSubmit = async (e) => {
@@ -60,10 +62,11 @@ const handleSubmit = async (e) => {
       console.log("error in uploading video to database", err.response?.data || err.message);
       setProgress(0);
     }
-    setProgress(100); 
     await queryclient.invalidateQueries({
         queryKey: ["channel", user?.googleId],
       });
+    setProgress(100); 
+    
     toast.success("Upload successful!");
     onClose();
   } catch (err) {
