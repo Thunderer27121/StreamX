@@ -26,6 +26,7 @@ export default function VideoPlayer() {
     setDisliked,
     subscribed,
     setSubscribed,
+    isLoading
   } = useVideoData(id, user?._id);
 
   const { toggleSubscription } = useSubscribe(subscribed, setSubscribed);
@@ -48,6 +49,27 @@ export default function VideoPlayer() {
         overflow-hidden min-h-0
       "
     >
+      {/* Loading Overlay */}
+      {isLoading && (
+        <div className="absolute inset-0 bg-black bg-opacity-95 z-50 flex items-center justify-center">
+          <div className="flex flex-col items-center gap-6">
+            <div className="relative">
+              <div className="w-20 h-20 border-4 border-gray-700 border-t-red-600 rounded-full animate-spin" />
+              <div className="absolute inset-0 w-20 h-20 border-4 border-transparent border-b-red-500 rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '1s' }} />
+            </div>
+            
+            <div className="flex flex-col items-center gap-2">
+              <p className="text-xl font-semibold text-white animate-pulse">Loading video...</p>
+              <div className="flex gap-1">
+                <div className="w-2 h-2 bg-red-600 rounded-full animate-bounce" style={{ animationDelay: '0s' }} />
+                <div className="w-2 h-2 bg-red-600 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
+                <div className="w-2 h-2 bg-red-600 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <section
         className="
           w-full lg:w-[50%]
@@ -91,7 +113,6 @@ export default function VideoPlayer() {
   </div>
 </div>
 
-          {/* DESKTOP: Channel then actions below (stacked) */}
           <div className="hidden lg:block border-b border-gray-800 pb-3 space-y-3">
             <VideoChannel
               video={video}
@@ -113,7 +134,6 @@ export default function VideoPlayer() {
         </div>
       </section>
 
-      {/* RIGHT COLUMN – full-height comments panel (list scrolls inside Comments) */}
       <section className="flex-1 flex flex-col bg-black min-h-0">
         <Comments
           videoId={video?._id}

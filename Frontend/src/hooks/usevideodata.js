@@ -7,7 +7,7 @@ export function useVideoData(id, userId) {
   const [disliked, setDisliked] = useState(false);
   const [subscribed, setSubscribed] = useState(false);
 
-  const { data: video } = useQuery({
+  const { data: video, isLoading } = useQuery({
     queryKey: ["video", id],
     queryFn: async () => {
       const res = await axios.get(`${import.meta.env.VITE_api_base_url}/api/dbvideo/`, {
@@ -31,6 +31,6 @@ export function useVideoData(id, userId) {
     video,
     liked, setLiked,
     disliked, setDisliked,
-    subscribed, setSubscribed
+    subscribed, setSubscribed, isLoading
   };
 }
