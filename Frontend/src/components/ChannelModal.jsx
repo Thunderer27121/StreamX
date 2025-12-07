@@ -29,7 +29,7 @@ export default function CreateChannelModal({ isOpen, setisOpen}) {
       toast.error(response.data.error);
       console.log(response.data.error);
     } else {
-      queryclient.invalidateQueries("channel");
+      queryclient.invalidateQueries("channel", user?.googleId);
       toast.success("Channel created successfully");
       navigate("/mychannel");
       setisOpen(false);

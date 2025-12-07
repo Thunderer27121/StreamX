@@ -96,7 +96,7 @@ const StreamXChannelPage = () => {
       }
     );
     if(response.status == 200){
-      queryclient.invalidateQueries("channel");
+      queryclient.invalidateQueries("channel", user?.googleId);
        toast.success("Channel updated successfully!");
     setIsEditModalOpen(false);
     }
