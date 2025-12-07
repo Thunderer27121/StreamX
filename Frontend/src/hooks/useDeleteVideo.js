@@ -27,7 +27,7 @@ export function useDeleteVideo() {
 
       if (user?.googleId) {
         queryClient.invalidateQueries({
-          queryKey: ["channel", user.googleId],
+          queryKey: ["channel", user?.googleId],
         });
       }
     },

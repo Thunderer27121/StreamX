@@ -135,7 +135,7 @@ export default function ChannelPage() {
                                                 {user?._id && channel?._id !== channelId && (
                                                     <button
                                                         onClick={() =>
-                                                            toggleSubscription(user._id, channel._id)
+                                                            toggleSubscription(user._id, channel._id)  
                                                         }
                                                         className={`group relative px-8 py-3 rounded-full font-bold transition-all duration-300 hover:scale-105 hover:shadow-xl flex items-center gap-2 ${subscribed
                                                                 ? "bg-zinc-800 text-white hover:bg-zinc-700"

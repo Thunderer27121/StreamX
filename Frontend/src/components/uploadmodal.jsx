@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useChannel } from "../contexts/channelContext";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function UploadModal({ onClose }) {
   const [title, setTitle] = useState("");
@@ -12,7 +13,8 @@ export default function UploadModal({ onClose }) {
   const [isDragging, setIsDragging] = useState(false);
   const [progress, setProgress] = useState(0);
   const [category, setcategory] = useState("");
-  const {channel, getChannel}= useChannel();
+  const {channel}= useChannel();
+  const queryclient = useQueryClient();
 
 const handleSubmit = async (e) => {
   e.preventDefault();
@@ -58,10 +60,10 @@ const handleSubmit = async (e) => {
       console.log("error in uploading video to database", err.response?.data || err.message);
       setProgress(0);
     }
-
-
-
     setProgress(100); 
+    await queryclient.invalidateQueries({
+        queryKey: ["channel", user?.googleId],
+      });
     toast.success("Upload successful!");
     onClose();
   } catch (err) {

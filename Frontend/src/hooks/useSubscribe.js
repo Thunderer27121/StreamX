@@ -1,7 +1,11 @@
+import { useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useUser } from "../contexts/usercontext";
 
 export function useSubscribe(subscribed, setSubscribed) {
+  const {user} = useUser();
+  const queryclient = useQueryClient();
   const toggleSubscription = async (userId, channelId) => {
     try {
       const url = subscribed
@@ -12,6 +16,7 @@ export function useSubscribe(subscribed, setSubscribed) {
 
       if (res.status === 200) {
         setSubscribed(!subscribed);
+        await queryclient.invalidateQueries({queryKey : ["channel", user?.googleId]})
       } else {
         toast.error("Subscription error");
       }
