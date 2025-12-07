@@ -16,7 +16,6 @@ const StreamXChannelPage = () => {
   const navigate = useNavigate();
   const { mutate: deleteVideo, isPending } = useDeleteVideo();
   const [activeTab, setActiveTab] = useState('HOME');
-  const [checking, setChecking] = useState(true);
   
   // Edit modal state
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -96,7 +95,7 @@ const StreamXChannelPage = () => {
       }
     );
     if(response.status == 200){
-      queryclient.invalidateQueries("channel", user?.googleId);
+     await queryclient.invalidateQueries({queryKey : ["channel", user?.googleId]});
        toast.success("Channel updated successfully!");
     setIsEditModalOpen(false);
     }
@@ -120,11 +119,9 @@ const StreamXChannelPage = () => {
     toast.error("Unauthorized access");
     navigate("/");
   }
-
-  setChecking(false);
 }, [user, channel, isLoading]);
 
-  if (checking && isLoading) {
+  if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center h-screen bg-black px-4">
         <motion.div
