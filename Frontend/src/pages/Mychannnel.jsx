@@ -112,7 +112,6 @@ const StreamXChannelPage = () => {
 
   useEffect(() => {
   if (!user) return;
-  if (isLoading) return; 
 
   if (!channel) {
     toast.error("Create a channel first");
@@ -125,7 +124,7 @@ const StreamXChannelPage = () => {
   setChecking(false);
 }, [user, channel, isLoading]);
 
-  if (checking) {
+  if (checking && isLoading) {
     return (
       <div className="flex flex-col items-center justify-center h-screen bg-black px-4">
         <motion.div
