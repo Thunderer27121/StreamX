@@ -10,7 +10,7 @@ import fetch from "node-fetch";
       code,
       client_id: process.env.google_client_id,
       client_secret: process.env.google_client_secret,
-      redirect_uri: "http://localhost:5173", // your frontend URL
+      redirect_uri: "https://stream-x-mu.vercel.app", // your frontend URL
       grant_type: "authorization_code",
     });
 
