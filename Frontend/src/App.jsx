@@ -27,9 +27,6 @@ function App() {
     }
   }, []);
 
-  useEffect(() => {
-    navigate("/");
-  }, [user]);
 
   if (loading) {
     return <SplashScreen onFinish={() => setLoading(false)} />;
