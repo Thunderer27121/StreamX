@@ -8,7 +8,6 @@ import { UserProvider } from './contexts/usercontext.jsx'
 import { ChannelProvider } from './contexts/channelContext.jsx'
 import { VideoProvider } from './contexts/videocontext.jsx';
 import {QueryClientProvider, QueryClient} from "@tanstack/react-query"
-import { ThemeProvider } from './contexts/themeContext.jsx'
 const queryclient = new QueryClient();
 
 createRoot(document.getElementById('root')).render(
