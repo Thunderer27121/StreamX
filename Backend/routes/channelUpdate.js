@@ -1,6 +1,7 @@
 import express from "express";
 import multer from "multer";
 import { updateChannel } from "../controllers/channelUpdateController.js";
+import { deleteChannel } from "../controllers/deleteChannel.js";
 
 const router = express.Router();
 
@@ -11,5 +12,6 @@ const upload = multer({
 });
 
 router.put("/:id", upload.single("profilePicture"), updateChannel);
+router.delete("/delete/:id",  deleteChannel);
 
 export default router;

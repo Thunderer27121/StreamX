@@ -8,15 +8,17 @@ import { motion } from "framer-motion";
 import { useDeleteVideo } from '../hooks/useDeleteVideo.js';
 import axios from 'axios';
 import { useQueryClient } from '@tanstack/react-query';
+import { useDeleteChannel } from '../hooks/useDeleteChannel.js';
 
 const StreamXChannelPage = () => {
   const queryclient = useQueryClient();
-  const { channel, isLoading} = useChannel();
+  const { channel, isLoading } = useChannel();
   const { user } = useUser();
   const navigate = useNavigate();
   const { mutate: deleteVideo, isPending } = useDeleteVideo();
   const [activeTab, setActiveTab] = useState('HOME');
-  
+  const {mutate : deleteChannel, isPending : deleteChannelPending} = useDeleteChannel();
+
   // Edit modal state
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editForm, setEditForm] = useState({
@@ -68,58 +70,58 @@ const StreamXChannelPage = () => {
 
   // Handle form submit
   const handleSaveChanges = async () => {
-  if (!editForm.name.trim()) {
-    toast.error("Channel name is required");
-    return;
-  }
-  if (!editForm.handle.trim()) {
-    toast.error("Channel handle is required");
-    return;
-  }
-
-  setIsSaving(true);
-  try {
-    const formData = new FormData();
-    formData.append("name", editForm.name);
-    formData.append("handle", editForm.handle);
-    formData.append("description", editForm.description);
-    if (editForm.profilePicture) {
-      formData.append("profilePicture", editForm.profilePicture);
+    if (!editForm.name.trim()) {
+      toast.error("Channel name is required");
+      return;
+    }
+    if (!editForm.handle.trim()) {
+      toast.error("Channel handle is required");
+      return;
     }
 
-    const response = await axios.put(
-      `${import.meta.env.VITE_api_base_url}/api/channels/${channel._id}`,
-      formData,
-      {
-        withCredentials: true, 
+    setIsSaving(true);
+    try {
+      const formData = new FormData();
+      formData.append("name", editForm.name);
+      formData.append("handle", editForm.handle);
+      formData.append("description", editForm.description);
+      if (editForm.profilePicture) {
+        formData.append("profilePicture", editForm.profilePicture);
       }
-    );
-    if(response.status == 200){
-     await queryclient.invalidateQueries({queryKey : ["channel", user?.googleId]});
-       toast.success("Channel updated successfully!");
-    setIsEditModalOpen(false);
+
+      const response = await axios.put(
+        `${import.meta.env.VITE_api_base_url}/api/channels/${channel._id}`,
+        formData,
+        {
+          withCredentials: true,
+        }
+      );
+      if (response.status == 200) {
+        await queryclient.invalidateQueries({ queryKey: ["channel", user?.googleId] });
+        toast.success("Channel updated successfully!");
+        setIsEditModalOpen(false);
+      }
+    } catch (error) {
+      console.error(error);
+      const message =
+        error.response?.data?.message || "Failed to update channel";
+      toast.error(message);
+    } finally {
+      setIsSaving(false);
     }
-  } catch (error) {
-    console.error(error);
-    const message =
-      error.response?.data?.message || "Failed to update channel";
-    toast.error(message);
-  } finally {
-    setIsSaving(false);
-  }
-};
+  };
 
   useEffect(() => {
-  if (!user) return;
+    if (!user) return;
 
-  if (!channel) {
-    toast.error("Create a channel first");
-    navigate("/");
-  } else if (channel?.googleId !== user?.googleId) {
-    toast.error("Unauthorized access");
-    navigate("/");
-  }
-}, [user, channel, isLoading]);
+    if (!channel) {
+      toast.error("Create a channel first");
+      navigate("/");
+    } else if (channel?.googleId !== user?.googleId) {
+      toast.error("Unauthorized access");
+      navigate("/");
+    }
+  }, [user, channel, isLoading]);
 
   if (isLoading) {
     return (
@@ -353,6 +355,14 @@ const StreamXChannelPage = () => {
 
             {/* Modal Footer */}
             <div className="sticky bottom-0 bg-gradient-to-r from-gray-900 to-black border-t border-gray-700 p-6 flex justify-end gap-3 z-10">
+              <button
+                onClick={ () =>{ 
+                  const res =  deleteChannel(channel?._id)}}
+                disabled={deleteChannelPending}
+                className="px-4 py-2 bg-red-600 text-white rounded-md"
+              >
+                {isPending ? "Deleting..." : "Delete Channel"}
+              </button>
               <button
                 onClick={() => setIsEditModalOpen(false)}
                 className="px-6 py-2.5 bg-gray-800 hover:bg-gray-700 rounded-lg font-medium transition-colors"
