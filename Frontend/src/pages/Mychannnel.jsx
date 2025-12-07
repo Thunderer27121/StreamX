@@ -123,7 +123,7 @@ const StreamXChannelPage = () => {
       setChecking(false);
     }, 1000);
     return () => clearTimeout(timer);
-  }, [user, channel, navigate]);
+  }, [user, channel]);
 
   if (checking) {
     return (

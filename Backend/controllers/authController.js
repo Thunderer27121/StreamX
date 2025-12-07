@@ -25,7 +25,7 @@ import fetch from "node-fetch";
 
    const cachedProfile = await redis.get(`google:user:${code}`);
     if (cachedProfile) {
-      console.log("Serving user info from Redis cache ✅");
+      console.log("Serving user info from Redis cache ");
       return res.json(JSON.parse(cachedProfile));
     }
 
