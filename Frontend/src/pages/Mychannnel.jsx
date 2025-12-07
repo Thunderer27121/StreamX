@@ -11,7 +11,7 @@ import { useQueryClient } from '@tanstack/react-query';
 
 const StreamXChannelPage = () => {
   const queryclient = useQueryClient();
-  const { channel} = useChannel();
+  const { channel, isLoading} = useChannel();
   const { user } = useUser();
   const navigate = useNavigate();
   const { mutate: deleteVideo, isPending } = useDeleteVideo();
@@ -111,19 +111,19 @@ const StreamXChannelPage = () => {
 };
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      if (!user) return;
-      if (!channel) {
-        toast.error("Create a channel first");
-        navigate("/");
-      } else if (channel?.googleId !== user?.googleId) {
-        toast.error("Unauthorized access");
-        navigate("/");
-      }
-      setChecking(false);
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, [user, channel]);
+  if (!user) return;
+  if (isLoading) return; 
+
+  if (!channel) {
+    toast.error("Create a channel first");
+    navigate("/");
+  } else if (channel?.googleId !== user?.googleId) {
+    toast.error("Unauthorized access");
+    navigate("/");
+  }
+
+  setChecking(false);
+}, [user, channel, isLoading]);
 
   if (checking) {
     return (
