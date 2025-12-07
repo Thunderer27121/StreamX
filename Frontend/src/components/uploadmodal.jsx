@@ -57,16 +57,15 @@ const handleSubmit = async (e) => {
     try {
       setProgress(95)
       const videores = await axios.post(`${import.meta.env.VITE_api_base_url}/api/dbvideo/videoupload`,videodata);
+      await queryclient.invalidateQueries({
+        queryKey: ["channel", user?.googleId],
+      });
       console.log(videores.data);
     } catch (err) {
       console.log("error in uploading video to database", err.response?.data || err.message);
       setProgress(0);
     }
-    await queryclient.invalidateQueries({
-        queryKey: ["channel", user?.googleId],
-      });
     setProgress(100); 
-    
     toast.success("Upload successful!");
     onClose();
   } catch (err) {
