@@ -5,7 +5,7 @@ import { useUser } from '../contexts/usercontext';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { motion } from "framer-motion";
-import { useDeleteVideo } from '../hooks/useDeleteVideo.JS';
+import { useDeleteVideo } from '../hooks/useDeleteVideo.js';
 import axios from 'axios';
 import { useQueryClient } from '@tanstack/react-query';
 
