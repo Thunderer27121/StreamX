@@ -15,7 +15,7 @@ export default function UploadModal({ onClose }) {
   const [progress, setProgress] = useState(0);
   const [category, setcategory] = useState("");
   const {channel}= useChannel();
-  const user = useUser();
+  const {user} = useUser();
   const queryclient = useQueryClient();
 
 const handleSubmit = async (e) => {
