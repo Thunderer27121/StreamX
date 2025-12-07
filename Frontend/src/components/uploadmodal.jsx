@@ -191,7 +191,7 @@ const handleSubmit = async (e) => {
                   whileFocus={{ scale: 1.01 }}
                   type="text"
                   placeholder="Enter an engaging title..."
-                  className="w-full border-2 border-gray-500 p-2.5 sm:p-3 rounded-xl focus:border-violet-500 focus:outline-none transition-all duration-200 text-sm sm:text-base"
+                  className="w-full border-2 border-gray-500 p-2.5 sm:p-3 rounded-xl focus:border-violet-500 focus:outline-none transition-all duration-200 text-sm sm:text-base text-black"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   required
@@ -211,7 +211,7 @@ const handleSubmit = async (e) => {
                 <motion.textarea
                   whileFocus={{ scale: 1.01 }}
                   placeholder="Tell viewers about your video..."
-                  className="w-full border-2 border-gray-500 p-2.5 sm:p-3 rounded-xl focus:border-violet-500 focus:outline-none transition-all duration-200 min-h-[80px] lg:min-h-[120px] resize-none text-sm sm:text-base"
+                  className="w-full border-2 border-gray-500 p-2.5 sm:p-3 rounded-xl focus:border-violet-500 focus:outline-none transition-all duration-200 min-h-[80px] lg:min-h-[120px] resize-none text-sm sm:text-base text-black"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   required
