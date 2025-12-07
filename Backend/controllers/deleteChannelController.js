@@ -8,12 +8,14 @@ export const deleteChannel = async (req, res) => {
 
   try {
     const channel = await Channel.findById(channelId).populate("videos"); 
+    console.log(channel);
 
     if (!channel) {
       return res.status(404).json({ message: "Channel not found" });
     }
 
     const videos = channel.videos || [];
+    console.log(videos);
 
     await Promise.all(
       videos.map(async (video) => {

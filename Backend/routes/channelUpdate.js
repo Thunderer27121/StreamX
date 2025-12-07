@@ -1,7 +1,7 @@
 import express from "express";
 import multer from "multer";
 import { updateChannel } from "../controllers/channelUpdateController.js";
-import { deleteChannel } from "../controllers/deleteChannel.js";
+import { deleteChannel } from "../controllers/deleteChannelController.js";
 
 const router = express.Router();
 
