@@ -8,7 +8,7 @@ export function useDeleteComment(videoId) {
   
     mutationFn: async ({ commentId, userId, channelId }) => {
       await axios.delete(
-        `http://localhost:5000/api/comments/${commentId}/${userId || "null"}/${channelId || "null"}`
+        `${import.meta.env.VITE_api_base_url}/api/comments/${commentId}/${userId || "null"}/${channelId || "null"}`
       );
     },
     onSuccess: (_, { commentId }) => {

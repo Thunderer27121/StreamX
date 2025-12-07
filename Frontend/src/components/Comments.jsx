@@ -29,7 +29,7 @@ export default function Comments({ videoId, user, videoChannelId, googleId }) {
       video: videoId,
       user: user._id,
       content: comment.trim(),
-      user_avatar: `http://localhost:5000/api/auth/profile-pfp/${user._id}`,
+      user_avatar: `${import.meta.env.VITE_api_base_url}/api/auth/profile-pfp/${user._id}`,
       user_name: user.name,
       time: new Date().toDateString(),
     };
@@ -59,7 +59,7 @@ export default function Comments({ videoId, user, videoChannelId, googleId }) {
       <div className="p-2 border-b border-gray-800 flex-shrink-0">
         <div className="flex gap-4">
           <img
-            src={`http://localhost:5000/api/auth/profile-pfp/${user._id}`}
+            src={`${import.meta.env.VITE_api_base_url}/api/auth/profile-pfp/${user._id}`}
             alt="Your avatar"
             className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex-shrink-0"
           />

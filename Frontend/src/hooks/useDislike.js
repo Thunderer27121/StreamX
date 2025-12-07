@@ -4,7 +4,7 @@ export function useLikeDislike(video, userId, liked, setLiked, disliked, setDisl
   
   const toggleLike = async () => {
     const condition = liked ? "likeremoved" : "likeadded";
-    await axios.get(`http://localhost:5000/api/like/${condition === "likeadded" ? "liked" : "unliked"}`, {
+    await axios.get(`${import.meta.env.VITE_api_base_url}/api/like/${condition === "likeadded" ? "liked" : "unliked"}`, {
       params: { userId, videoId: video._id }
     });
 
@@ -14,7 +14,7 @@ export function useLikeDislike(video, userId, liked, setLiked, disliked, setDisl
 
   const toggleDislike = async () => {
     const condition = disliked ? "dislikeremoved" : "dislikeadded";
-    await axios.get(`http://localhost:5000/api/like/${condition === "dislikeadded" ? "disliked" : "dislikeremoved"}`, {
+    await axios.get(`${import.meta.env.VITE_api_base_url}/api/like/${condition === "dislikeadded" ? "disliked" : "dislikeremoved"}`, {
       params: { userId, videoId: video._id }
     });
 

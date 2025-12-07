@@ -7,7 +7,7 @@ export function useAddComment(videoId) {
   return useMutation({
     mutationFn: async (newComment) => {
       const res = await axios.post(
-        "http://localhost:5000/api/comments/add",
+        `${import.meta.env.VITE_api_base_url}/api/comments/add`,
         newComment
       );
       return res.data.comment;

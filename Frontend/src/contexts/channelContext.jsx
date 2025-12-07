@@ -17,13 +17,13 @@ export function ChannelProvider({ children }) {
   } = useQuery({
     queryKey: ["channel", user?.googleId],
     queryFn: async () => {
-      const res = await axios.post("http://localhost:5000/api/channel/", {
+      const res = await axios.post(`${import.meta.env.VITE_api_base_url}/api/channel/`, {
         googleId: user.googleId,
       });
       return res.data;
       
     },
-    enabled: !!user?.googleId, // only runs when user is logged in
+    enabled: !!user?.googleId, 
   });
 
   return (

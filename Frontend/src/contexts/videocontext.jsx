@@ -10,7 +10,7 @@ export const VideoProvider = ({ children }) => {
     const {data , isLoading, isError , error} = useQuery({
         queryKey : ['video', user],
         queryFn : async () => {
-        const response = await axios.get("http://localhost:5000/api/dbvideo/getall");
+        const response = await axios.get(`${import.meta.env.VITE_api_base_url}/api/dbvideo/getall`);
         const videoResponse = response.data.videos;
         const statusResponse = response.data.message;
         console.log(statusResponse);

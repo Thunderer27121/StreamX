@@ -10,7 +10,7 @@ export function useVideoData(id, userId) {
   const { data: video } = useQuery({
     queryKey: ["video", id],
     queryFn: async () => {
-      const res = await axios.get("http://localhost:5000/api/dbvideo/", {
+      const res = await axios.get(`${import.meta.env.VITE_api_base_url}/api/dbvideo/`, {
         params: { publicId: id }
       });
       return res.data;

@@ -55,7 +55,7 @@ export default function Navbar({ sidebarOpen, setSidebarOpen, setRightbarOpen })
                             {user?.picture && (
                                 <div className="flex items-center space-x-2">
                                     <img
-                                        src={`http://localhost:5000/api/auth/profile-pfp/${user._id}`}
+                                        src={`${import.meta.env.VITE_api_base_url}/api/auth/profile-pfp/${user._id}`}
                                         alt={user?.name || "User"}
                                         className="rounded-full h-10 w-10 cursor-pointer hover:ring-2 hover:ring-orange-500 transition-all"
                                         onClick={() => setRightbarOpen(true)}

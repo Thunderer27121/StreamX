@@ -5,8 +5,8 @@ export function useSubscribe(subscribed, setSubscribed) {
   const toggleSubscription = async (userId, channelId) => {
     try {
       const url = subscribed
-        ? "http://localhost:5000/api/sub/removesub"
-        : "http://localhost:5000/api/sub/addsub";
+        ? `${import.meta.env.VITE_api_base_url}/api/sub/removesub`
+        : `${import.meta.env.VITE_api_base_url}/api/sub/addsub`;
 
       const res = await axios.post(url, { userid: userId, channelid: channelId });
 

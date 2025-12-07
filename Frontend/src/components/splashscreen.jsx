@@ -6,9 +6,9 @@ export default function SplashScreen({ onFinish }) {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setShow(false); // trigger exit animation
-      setTimeout(onFinish, 800); // wait for exit animation
-    }, 2000); // 2 seconds before exit
+      setShow(false);
+      setTimeout(onFinish, 800); 
+    }, 2000); 
 
     return () => clearTimeout(timer);
   }, [onFinish]);

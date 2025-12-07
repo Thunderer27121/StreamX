@@ -10,19 +10,15 @@ export default function Share({
   const handleShare = async () => {
     try {
       if (navigator.share) {
-        // ✅ Native mobile/desktop share
         await navigator.share({
           title,
           text,
           url,
         });
-        // You can plug toast here if you use one
         console.log("Shared via native share");
       } else {
-        // ✅ Fallback: copy link to clipboard
         await navigator.clipboard.writeText(url);
         console.log("Link copied to clipboard");
-        // toast("Link copied to clipboard") etc.
       }
     } catch (err) {
       console.log("Share cancelled or failed");

@@ -26,7 +26,7 @@ const handleSubmit = async (e) => {
 
   try {
     const res = await axios.post(
-      "http://localhost:5000/api/video/upload",
+      `${import.meta.env.VITE_api_base_url}/api/video/upload`,
       formData,
       {
         headers: {
@@ -52,7 +52,7 @@ const handleSubmit = async (e) => {
     console.log(videodata);
     try {
       setProgress(95)
-      const videores = await axios.post("http://localhost:5000/api/dbvideo/videoupload",videodata);
+      const videores = await axios.post(`${import.meta.env.VITE_api_base_url}/api/dbvideo/videoupload`,videodata);
       console.log(videores.data);
     } catch (err) {
       console.log("error in uploading video to database", err.response?.data || err.message);

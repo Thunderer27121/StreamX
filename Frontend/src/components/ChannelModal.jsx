@@ -22,7 +22,7 @@ export default function CreateChannelModal({ isOpen, setisOpen}) {
       return;
     }
     const data = { googleId, name, handle, description, picture ,email};
-    const response = await axios.post("http://localhost:5000/api/channel/create", data);
+    const response = await axios.post(`${import.meta.env.VITE_api_base_url}/api/channel/create`, data);
 
     if (response.data.error) {
       toast.error(response.data.error);

@@ -7,7 +7,7 @@ export default function Login() {
   const login = useGoogleLogin({
     flow: "auth-code",
     onSuccess: async (codeResponse) => {
-      const res = await fetch("http://localhost:5000/api/auth/login", {
+      const res = await fetch(`${import.meta.env.VITE_api_base_url}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ code: codeResponse.code }),

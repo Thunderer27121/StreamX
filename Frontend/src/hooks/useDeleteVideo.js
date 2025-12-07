@@ -11,13 +11,13 @@ export function useDeleteVideo() {
   return useMutation({
     // expects: { publicId, id }
     mutationFn: async ({ publicId, id }) => {
-      await axios.delete("http://localhost:5000/api/video/delete", {
+      await axios.delete(`${import.meta.env.VITE_api_base_url}/api/video/delete`, {
         data: { publicId },
       });
 
     
       await axios.delete(
-        `http://localhost:5000/api/dbvideo/videodelete/${id}`
+        `${import.meta.env.VITE_api_base_url}/api/dbvideo/videodelete/${id}`
       );
     },
     onSuccess: () => {

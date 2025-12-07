@@ -89,7 +89,7 @@ const StreamXChannelPage = () => {
     }
 
     const response = await axios.put(
-      `http://localhost:5000/api/channels/${channel._id}`,
+      `${import.meta.env.VITE_api_base_url}/api/channels/${channel._id}`,
       formData,
       {
         withCredentials: true, 

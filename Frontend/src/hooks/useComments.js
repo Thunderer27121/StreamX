@@ -6,7 +6,7 @@ export function useComments(videoId) {
     queryKey: ["comments", videoId],
     queryFn: async () => {
       const res = await axios.get(
-        `http://localhost:5000/api/comments/${videoId}`
+        `${import.meta.env.VITE_api_base_url}/api/comments/${videoId}`
       );
       return res.data.comments || [];
     },

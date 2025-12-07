@@ -101,7 +101,7 @@ export default function ProfileSidebar({
             >
               <div className="relative">
                 <img
-                  src={`http://localhost:5000/api/auth/profile-pfp/${user._id}`}
+                  src={`${import.meta.env.VITE_api_base_url}/api/auth/profile-pfp/${user._id}`}
                   alt=""
                   className="h-16 min-w-16 rounded-full ring-2 ring-orange-500/50"
                 />
