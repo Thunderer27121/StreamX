@@ -1,6 +1,7 @@
 
 import cloudinary from "../db/cloudinary.js";
 import Channel from "../models/channelModal.js";
+import { Comments } from "../models/commentModal.js";
 import { Video } from "../models/videomodal.js";
 
 function isGoogleAvatar(url) {
@@ -93,7 +94,7 @@ export const deleteChannel = async (req, res) => {
     if (videos.length > 0) {
       const videoIds = videos.map((v) => v._id);
 
-      await Comment.deleteMany({ video: { $in: videoIds } });
+      await Comments.deleteMany({ video: { $in: videoIds } });
 
       await Video.deleteMany({ _id: { $in: videoIds } });
     }

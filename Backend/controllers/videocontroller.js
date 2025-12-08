@@ -1,6 +1,7 @@
 import Channel from "../models/channelModal.js";
 import { Video } from "../models/videomodal.js";
 import cloudinary from "../db/cloudinary.js";
+import { Comments } from "../models/commentModal.js";
 
 
 function getCloudinaryPublicIdFromUrl(url) {
@@ -109,7 +110,7 @@ export const deleteVideo = async (req, res) => {
       }
     }
 
-    await Comment.deleteMany({ video: video._id });
+    await Comments.deleteMany({ video: video._id });
 
     await video.deleteOne();
 
