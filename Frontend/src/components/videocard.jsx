@@ -5,7 +5,7 @@ export default function VideoCard({ video }) {
   const navigate = useNavigate();
   
   const handleClick = () => {
-    navigate(`/watch/${encodeURIComponent(video.publicId)}`);
+    navigate(`/watch/?publicId=${encodeURIComponent(video.publicId)}`);
   };
 
   // Format views count
