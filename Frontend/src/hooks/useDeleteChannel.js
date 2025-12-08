@@ -2,8 +2,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "react-toastify";
 import {useNavigate} from "react-router-dom"
+import { useUser } from "../contexts/usercontext";
 
 export function useDeleteChannel() {
+  const {user} = useUser();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -13,7 +15,7 @@ export function useDeleteChannel() {
       return res.data;
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["channels"] });
+      queryClient.invalidateQueries({ queryKey: ["channels",user?.googleId] });
       toast.info(data.message);
       navigate("/");
     },
