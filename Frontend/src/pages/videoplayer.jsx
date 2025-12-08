@@ -15,6 +15,7 @@ import Comments from "../components/Comments.jsx";
 
 export default function VideoPlayer() {
   const { id } = useParams();
+  console.log(id);
   const { user } = useUser();
   const videoRef = useRef(null);
 
