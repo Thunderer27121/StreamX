@@ -15,7 +15,9 @@ export default function ProfileSidebar({
   const { channel } = useChannel();
   const [showAccountList, setShowAccountList] = useState(false);
 
-
+  useEffect(() => {
+  }, [channel])
+  
   const Logout = () => {
     logout();
     setRightbarOpen(false);
