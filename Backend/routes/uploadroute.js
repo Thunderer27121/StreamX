@@ -35,10 +35,10 @@ router.post("/upload", upload.single("video"), async (req, res) => {
   }
 });
 
-// ✅ Delete from Cloudinary
+
 router.delete("/delete", async (req, res) => {
   try {
-    const { publicId } = req.body; // axios.delete(..., { data: { publicId } })
+    const { publicId } = req.body; 
 
     if (!publicId) {
       return res.status(400).json({ success: false, message: "publicId is required" });

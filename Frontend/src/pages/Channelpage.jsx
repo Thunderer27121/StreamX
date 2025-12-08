@@ -6,11 +6,13 @@ import { useUser } from "../contexts/usercontext.jsx";
 import { useState, useEffect } from "react";
 import { useSubscribe } from "../hooks/useSubscribe.js";
 import Share from "../components/Share.jsx";
+import { useChannel } from "../contexts/channelContext.jsx";
 
 export default function ChannelPage() {
     const { user } = useUser();
     const { channelId } = useParams();
     const { Videos, isLoading } = useVideo();
+    const {channel} = useChannel();
 
     const allVideos = Videos || [];
     const channelVideos = allVideos.filter((v) => {
@@ -20,12 +22,12 @@ export default function ChannelPage() {
         return v.uploadedBy === channelId;
     });
 
-    const channel =
+    const Channel =
         channelVideos.length > 0 && typeof channelVideos[0].uploadedBy === "object"
             ? channelVideos[0].uploadedBy
             : null;
 
-    console.log(channel);
+    console.log(Channel);
 
     // total views
     const totalViews = channelVideos.reduce(
@@ -36,11 +38,11 @@ export default function ChannelPage() {
     const [subscribed, setSubscribed] = useState(false);
 
     useEffect(() => {
-        if (channel && user?._id) {
+        if (Channel && user?._id) {
             const isSubbed = channel.subscribers?.includes(user._id);
             setSubscribed(!!isSubbed);
         }
-    }, [channel, user?._id]);
+    }, [Channel, user?._id]);
 
     const { toggleSubscription } = useSubscribe(subscribed, setSubscribed);
 
@@ -83,8 +85,8 @@ export default function ChannelPage() {
                                                 <div className="absolute -inset-1 bg-gradient-to-r from-pink-500 via-purple-500 to-orange-500 rounded-full blur-xl opacity-75 group-hover:opacity-100 transition duration-500 animate-pulse"></div>
                                                 <div className="relative bg-black rounded-full p-1.5">
                                                     <img
-                                                        src={channel?.profilePictureUrl}
-                                                        alt={channel?.name}
+                                                        src={Channel?.profilePictureUrl}
+                                                        alt={Channel?.name}
                                                         className="w-28 h-28 sm:w-36 sm:h-36 rounded-full object-cover"
                                                     />
                                                 </div>
@@ -97,7 +99,7 @@ export default function ChannelPage() {
                                                 <div>
                                                     <div className="flex items-center justify-center md:justify-start gap-2 mb-3">
                                                         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-white via-zinc-100 to-zinc-400 bg-clip-text text-transparent">
-                                                            {channel.name}
+                                                            {Channel.name}
                                                         </h1>
                                                         <CheckCircle2 className="w-7 h-7 text-white fill-blue-400 flex-shrink-0" />
                                                     </div>
@@ -107,7 +109,7 @@ export default function ChannelPage() {
                                                         <div className="flex items-center gap-2 bg-zinc-800/50 px-4 py-2 rounded-full">
                                                             <Users className="w-4 h-4 text-pink-400" />
                                                             <span className="font-bold text-white">
-                                                                {(channel.subscribers?.length || 0).toLocaleString()}
+                                                                {(Channel.subscribers?.length || 0).toLocaleString()}
                                                             </span>
                                                             <span className="text-zinc-400">subscribers</span>
                                                         </div>
@@ -132,10 +134,10 @@ export default function ChannelPage() {
                                             {/* Action Buttons */}
                                             <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
                                                 {/* Subscribe only if logged in and not own channel */}
-                                                {user?._id && channel?._id !== channelId && (
+                                                {user?._id && channel?.message || channel?._id !== channelId && (
                                                     <button
                                                         onClick={() =>
-                                                            toggleSubscription(user._id, channel._id)  
+                                                            toggleSubscription(user._id, Channel._id)  
                                                         }
                                                         className={`group relative px-8 py-3 rounded-full font-bold transition-all duration-300 hover:scale-105 hover:shadow-xl flex items-center gap-2 ${subscribed
                                                                 ? "bg-zinc-800 text-white hover:bg-zinc-700"
@@ -148,9 +150,9 @@ export default function ChannelPage() {
                                                 )}
 
                                                 <Share
-                                                    url={`${window.location.origin}/channel/${channel._id}`}
-                                                    title={channel.name}
-                                                    text={`Check out ${channel.name}'s channel!`}
+                                                    url={`${window.location.origin}/channel/${Channel._id}`}
+                                                    title={Channel.name}
+                                                    text={`Check out ${Channel.name}'s channel!`}
                                                     className="hover:scale-105 border border-zinc-700" // extra styles on top
                                                 />
                                             </div>
@@ -178,7 +180,7 @@ export default function ChannelPage() {
                 )}
 
                 {/* VIDEOS SECTION */}
-                {channel && (
+                {Channel && (
                     <div className="px-4 sm:px-6 lg:px-8">
                         {/* Section Header */}
                         <div className="flex items-center gap-4 mb-8 mt-12">

@@ -9,7 +9,6 @@ export function useDeleteVideo() {
   const { user } = useUser(); 
 
   return useMutation({
-    // expects: { publicId, id }
     mutationFn: async ({ publicId, id }) => {
       await axios.delete(`${import.meta.env.VITE_api_base_url}/api/video/delete`, {
         data: { publicId },
