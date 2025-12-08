@@ -1,6 +1,32 @@
 import Channel from "../models/channelModal.js";
 import { Video } from "../models/videomodal.js";
+import cloudinary from "../db/cloudinary.js";
 
+
+function getCloudinaryPublicIdFromUrl(url) {
+  try {
+    const parts = url.split("/upload/");
+    if (parts.length < 2) return null;
+    let afterUpload = parts[1].split(/[?#]/)[0];
+
+    const segments = afterUpload.split("/");
+    const versionIndex = segments.findIndex(seg => /^v[0-9]+$/.test(seg));
+    let publicPath;
+
+    if (versionIndex !== -1) {
+      publicPath = segments.slice(versionIndex + 1).join("/");
+    } else {
+      publicPath = afterUpload;
+    }
+
+    publicPath = publicPath.replace(/\.[^/.]+$/, "");
+
+    return publicPath || null;
+  } catch (err) {
+    console.error("Error extracting Cloudinary public_id:", err);
+    return null;
+  }
+}
 
 export async function uploadVideo(req, res) {
   const { title, description, videoUrl, publicId, duration, uploadedBy, category } = req.body;
@@ -60,7 +86,7 @@ export async function singlevideo(req, res) {
     res.status(500).json({ message: "Failed to fetch video" });
   }
 }
-export async function deleteVideo(req, res) {
+export const deleteVideo = async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -69,18 +95,27 @@ export async function deleteVideo(req, res) {
       return res.status(404).json({ message: "Video not found" });
     }
 
-    await Channel.findByIdAndUpdate(video.uploadedBy, {
-      $pull: { videos: video._id },
-    });
+    if (video.publicId) {
+      await cloudinary.uploader.destroy(video.publicId, {
+        resource_type: "video",
+      });
+    }
 
-    await Video.findByIdAndDelete(id);
+    if (video.thumbnail) {
+      const thumbPublicId = getCloudinaryPublicIdFromUrl(video.thumbnail);
 
-    return res.status(200).json({ message: "Video deleted from database" });
+      if (thumbPublicId) {
+        await cloudinary.uploader.destroy(thumbPublicId);
+      }
+    }
+
+    await Comment.deleteMany({ video: video._id });
+
+    await video.deleteOne();
+
+    return res.json({ message: "Video and its comments deleted successfully" });
   } catch (err) {
-    console.error("DB delete error:", err);
-    return res
-      .status(500)
-      .json({ message: "Database error while deleting video" });
+    console.error("Error deleting video:", err);
+    return res.status(500).json({ message: "Server error while deleting video" });
   }
-}
-
+};
