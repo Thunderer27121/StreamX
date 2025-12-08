@@ -90,12 +90,12 @@ export async function singlevideo(req, res) {
 export const deleteVideo = async (req, res) => {
   try {
     const { id } = req.params;
-
+    console.log(id)
     const video = await Video.findById(id);
     if (!video) {
       return res.status(404).json({ message: "Video not found" });
     }
-
+    console.log(video.publicId)
     if (video.publicId) {
       await cloudinary.uploader.destroy(video.publicId, {
         resource_type: "video",
