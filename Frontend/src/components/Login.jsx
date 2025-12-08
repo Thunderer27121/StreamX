@@ -1,8 +1,10 @@
 import { useGoogleLogin } from "@react-oauth/google";
 import { useUser } from "../contexts/usercontext.jsx";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const { loginUser } = useUser(); 
+  const navigate = useNavigate();
 
   const login = useGoogleLogin({
     flow: "auth-code",
@@ -14,10 +16,12 @@ export default function Login() {
       });
 
       const userInfo = await res.json();
-      loginUser({
+      await loginUser({
         ...userInfo,
         googleId: userInfo.googleId || userInfo.sub || userInfo.id || userInfo._id,
       });
+      navigate("/");
+
     },
   });
 
