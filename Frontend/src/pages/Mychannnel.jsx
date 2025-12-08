@@ -472,7 +472,7 @@ const StreamXChannelPage = () => {
                           src={latestvideo?.thumbnail}
                           alt={latestvideo?.title}
                           className="w-full h-40 sm:h-48 object-cover cursor-pointer"
-                          onClick={() => { navigate(`atch?publicId=/${encodeURIComponent(latestvideo.publicId)}`); }}
+                          onClick={() => { navigate(`watch?publicId=/${encodeURIComponent(latestvideo.publicId)}`); }}
                         />
                         <div className="absolute bottom-2 right-2 bg-black bg-opacity-80 px-2 py-1 rounded text-xs sm:text-sm text-white">
                           {latestvideo.duration}
