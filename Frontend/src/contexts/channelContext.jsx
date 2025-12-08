@@ -8,8 +8,6 @@ const ChannelContext = createContext();
 
 export function ChannelProvider({ children }) {
   const { user } = useUser();
-
-  // React Query for fetching channel
   const {
     data: channel,
     isLoading,

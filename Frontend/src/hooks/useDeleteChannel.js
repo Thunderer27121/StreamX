@@ -15,7 +15,7 @@ export function useDeleteChannel() {
       return res.data;
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["channels",user?.googleId] });
+      queryClient.invalidateQueries({ queryKey: ["channel",user?.googleId] });
       toast.info(data.message);
       navigate("/");
     },
