@@ -4,7 +4,7 @@ import Share from "./Share.jsx";
 
 
 export default function VideoActions({ video, liked, disliked, toggleLike, toggleDislike }) {
-  const shareUrl = `${window.location.origin}/${video?._id}`;
+  const shareUrl = `${window.location.origin}/${video?.publicId}`;
   return (
     <div className="flex items-center gap-2  sm:mr-10 px-1  flex-wrap">
             <div className="flex items-center bg-gray-800  rounded-full overflow-hidden border border-gray-700">

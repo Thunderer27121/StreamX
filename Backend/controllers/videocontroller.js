@@ -50,6 +50,7 @@ export async function singlevideo(req, res) {
     const  publicId = req.query.publicId;
     console.log(publicId);
     const video = await Video.findOne({publicId}).populate("uploadedBy");
+    console.log(video);
     if(!video){
       return res.status(404).json({message : "video not found"});
     }
