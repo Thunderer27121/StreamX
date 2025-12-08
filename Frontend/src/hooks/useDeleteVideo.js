@@ -21,7 +21,6 @@ export function useDeleteVideo() {
       );
     },
     onSuccess: () => {
-      toast.success("Video deleted successfully");
 
       queryClient.invalidateQueries({ queryKey: ["video"] });
 

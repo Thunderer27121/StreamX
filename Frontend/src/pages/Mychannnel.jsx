@@ -113,7 +113,7 @@ const StreamXChannelPage = () => {
     }
   };
 
-  // NEW: confirm delete handler
+
   const handleConfirmDelete = () => {
     if (!deleteTarget) return;
 
@@ -126,7 +126,6 @@ const StreamXChannelPage = () => {
         onSuccess: () => {
           toast.success("Video deleted successfully");
           setDeleteTarget(null);
-          queryclient.invalidateQueries({ queryKey: ["channel", user?.googleId] });
         },
         onError: (error) => {
           console.error(error);
