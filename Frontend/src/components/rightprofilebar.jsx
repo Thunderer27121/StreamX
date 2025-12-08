@@ -35,6 +35,7 @@ export default function ProfileSidebar({
     const id = acc.googleId || acc._id || acc.id || acc.sub;
     if (!id) return;
     switchAccount(id);
+    navigate("/");
     setRightbarOpen(false);
     setShowAccountList(false);
   };

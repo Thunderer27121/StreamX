@@ -17,7 +17,10 @@ const StreamXChannelPage = () => {
   const navigate = useNavigate();
   const { mutate: deleteVideo, isPending } = useDeleteVideo();
   const [activeTab, setActiveTab] = useState('HOME');
-  const {mutate : deleteChannel, isPending : deleteChannelPending} = useDeleteChannel();
+  const { mutate: deleteChannel, isPending: deleteChannelPending } = useDeleteChannel();
+
+  // NEW: track which video is being deleted (for confirmation + button state)
+  const [deleteTarget, setDeleteTarget] = useState(null); // { id, publicId, title }
 
   // Edit modal state
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -95,7 +98,7 @@ const StreamXChannelPage = () => {
           withCredentials: true,
         }
       );
-      if (response.status == 200) {
+      if (response.status === 200) {
         await queryclient.invalidateQueries({ queryKey: ["channel", user?.googleId] });
         toast.success("Channel updated successfully!");
         setIsEditModalOpen(false);
@@ -110,6 +113,31 @@ const StreamXChannelPage = () => {
     }
   };
 
+  // NEW: confirm delete handler
+  const handleConfirmDelete = () => {
+    if (!deleteTarget) return;
+
+    deleteVideo(
+      {
+        publicId: deleteTarget.publicId,
+        id: deleteTarget.id,
+      },
+      {
+        onSuccess: () => {
+          toast.success("Video deleted successfully");
+          setDeleteTarget(null);
+          queryclient.invalidateQueries({ queryKey: ["channel", user?.googleId] });
+        },
+        onError: (error) => {
+          console.error(error);
+          const message =
+            error?.response?.data?.message || "Failed to delete video";
+          toast.error(message);
+        },
+      }
+    );
+  };
+
   useEffect(() => {
     if (!user) return;
 
@@ -120,7 +148,7 @@ const StreamXChannelPage = () => {
       toast.error("Unauthorized access");
       navigate("/");
     }
-  }, [user, channel, isLoading]);
+  }, [user, channel, isLoading, navigate]);
 
   if (isLoading) {
     return (
@@ -355,8 +383,7 @@ const StreamXChannelPage = () => {
             {/* Modal Footer */}
             <div className="sticky bottom-0 bg-gradient-to-r from-gray-900 to-black border-t border-gray-700 p-6 flex justify-end gap-3 z-10">
               <button
-                onClick={ () =>
-                 deleteChannel(channel?._id)}
+                onClick={() => deleteChannel(channel?._id)}
                 disabled={deleteChannelPending}
                 className="px-4 py-2 bg-red-600 text-white rounded-md"
               >
@@ -375,6 +402,52 @@ const StreamXChannelPage = () => {
                 disabled={isSaving}
               >
                 {isSaving ? "Saving..." : "Save Changes"}
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
+
+      {/* NEW: Delete Confirmation Modal */}
+      {deleteTarget && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="bg-gray-900 border border-gray-700 rounded-2xl max-w-sm w-full p-6"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold">Delete video?</h2>
+              <button
+                onClick={() => setDeleteTarget(null)}
+                className="text-gray-400 hover:text-white"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <p className="text-sm text-gray-300 mb-4">
+              Are you sure you want to delete{" "}
+              <span className="font-semibold text-white">
+                {deleteTarget.title || "this video"}
+              </span>
+              ? This action cannot be undone.
+            </p>
+
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setDeleteTarget(null)}
+                className="px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-sm"
+                disabled={isPending}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleConfirmDelete}
+                className="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-sm text-white disabled:opacity-60"
+                disabled={isPending}
+              >
+                {isPending ? "Deleting..." : "Delete"}
               </button>
             </div>
           </motion.div>
@@ -489,15 +562,16 @@ const StreamXChannelPage = () => {
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
-                              deleteVideo({
-                                publicId: latestvideo?.publicId,
-                                id: latestvideo._id
-                              })
+                              setDeleteTarget({
+                                id: latestvideo._id,
+                                publicId: latestvideo.publicId,
+                                title: latestvideo.title,
+                              });
                             }}
-                            disabled={isPending}
+                            disabled={isPending && deleteTarget?.id === latestvideo._id}
                             className="mt-2 px-3 py-1 rounded-md bg-red-500 text-white text-sm hover:bg-red-600 disabled:opacity-60"
                           >
-                            {isPending ? "Deleting..." : "Delete"}
+                            {isPending && deleteTarget?.id === latestvideo._id ? "Deleting..." : "Delete"}
                           </button>
                         </div>
                       </div>
@@ -516,7 +590,11 @@ const StreamXChannelPage = () => {
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 {channel?.videos?.slice(1, 4).map((video) => (
-                  <div key={video?._id} onClick={() => { navigate(`/watch?publicId=${encodeURIComponent(video.publicId)}`); }} className="bg-gray-900 rounded-xl overflow-hidden hover:bg-gray-800 transition-colors cursor-pointer">
+                  <div
+                    key={video?._id}
+                    onClick={() => { navigate(`/watch?publicId=${encodeURIComponent(video.publicId)}`); }}
+                    className="bg-gray-900 rounded-xl overflow-hidden hover:bg-gray-800 transition-colors cursor-pointer"
+                  >
                     <div className="relative">
                       <img
                         src={video?.thumbnail}
@@ -534,15 +612,16 @@ const StreamXChannelPage = () => {
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
-                            deleteVideo({
-                              publicId: video?.publicId,
-                              id: video._id
-                            })
+                            setDeleteTarget({
+                              id: video._id,
+                              publicId: video.publicId,
+                              title: video.title,
+                            });
                           }}
-                          disabled={isPending}
+                          disabled={isPending && deleteTarget?.id === video._id}
                           className="mt-2 px-3 py-1 rounded-md bg-red-500 text-white text-sm hover:bg-red-600 disabled:opacity-60"
                         >
-                          {isPending ? "Deleting..." : "Delete"}
+                          {isPending && deleteTarget?.id === video._id ? "Deleting..." : "Delete"}
                         </button>
                       </div>
                     </div>
@@ -560,7 +639,11 @@ const StreamXChannelPage = () => {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
               {channel?.videos?.map((video) => (
-                <div key={video?.id} onClick={() => { navigate(`/watch?publicId=${encodeURIComponent(video.publicId)}`); }} className="bg-gray-900 rounded-xl overflow-hidden hover:bg-gray-800 transition-colors cursor-pointer">
+                <div
+                  key={video?._id}
+                  onClick={() => { navigate(`/watch?publicId=${encodeURIComponent(video.publicId)}`); }}
+                  className="bg-gray-900 rounded-xl overflow-hidden hover:bg-gray-800 transition-colors cursor-pointer"
+                >
                   <div className="relative">
                     <img
                       src={video?.thumbnail}
@@ -580,15 +663,16 @@ const StreamXChannelPage = () => {
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          deleteVideo({
-                            publicId: video?.publicId,
-                            id: video._id
-                          })
+                          setDeleteTarget({
+                            id: video._id,
+                            publicId: video.publicId,
+                            title: video.title,
+                          });
                         }}
-                        disabled={isPending}
+                        disabled={isPending && deleteTarget?.id === video._id}
                         className="mt-2 px-3 py-1 rounded-md bg-red-500 text-white text-sm hover:bg-red-600 disabled:opacity-60"
                       >
-                        {isPending ? "Deleting..." : "Delete"}
+                        {isPending && deleteTarget?.id === video._id ? "Deleting..." : "Delete"}
                       </button>
                     </div>
                   </div>
