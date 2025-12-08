@@ -134,7 +134,7 @@ export default function ChannelPage() {
                                             {/* Action Buttons */}
                                             <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
                                                 {/* Subscribe only if logged in and not own channel */}
-                                                {user?._id && channel?.message || channel?._id !== channelId && (
+                                                {user?._id && (channel?.message || channel?._id !== channelId) && (
                                                     <button
                                                         onClick={() =>
                                                             toggleSubscription(user._id, Channel._id)  
