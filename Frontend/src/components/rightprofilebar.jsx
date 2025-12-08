@@ -3,7 +3,7 @@ import { X, User, UserCheck, LogOut, Sun, Moon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../contexts/usercontext.jsx";
 import { useChannel } from "../contexts/channelContext.jsx";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function ProfileSidebar({
   rightbarOpen,
