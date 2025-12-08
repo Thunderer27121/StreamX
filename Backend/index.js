@@ -35,7 +35,6 @@ app.use("/api/dbvideo", videoroute);
 app.use("/api/sub", subroute);
 app.use("/api/views", viewRoute);
 app.use("/api/like" , likeroute);
-app.use("/api/dbvideo", videoroute);
 app.use("/api/comments", commentRoute);
 app.use("/api/channels",channelUpdateRoute);
 
