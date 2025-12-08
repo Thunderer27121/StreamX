@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { useUser } from "../contexts/usercontext.jsx";
 import { useRef } from "react";
 
@@ -14,8 +14,9 @@ import VideoActions from "../components/Videoactions.jsx";
 import Comments from "../components/Comments.jsx";
 
 export default function VideoPlayer() {
-  const { id } = useParams();
-  console.log(id);
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+const publicId = params.get("publicId");
   const { user } = useUser();
   const videoRef = useRef(null);
 
@@ -28,7 +29,7 @@ export default function VideoPlayer() {
     subscribed,
     setSubscribed,
     isLoading
-  } = useVideoData(id, user?._id);
+  } = useVideoData(publicId, user?._id);
 
   const { toggleSubscription } = useSubscribe(subscribed, setSubscribed);
   const { toggleLike, toggleDislike } = useLikeDislike(

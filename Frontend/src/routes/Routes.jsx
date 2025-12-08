@@ -11,7 +11,7 @@ const AppRoutes = () => {
     <div>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/:id" element={<VideoPlayer />} />
+          <Route path="/watch" element={<VideoPlayer />} />
           <Route path="/mychannel" element={<StreamXChannelPage/>} />
           <Route path='/videos/:category' element={<Home/>}/>
           <Route path="/search" element={<SearchResults />} />
