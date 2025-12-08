@@ -41,7 +41,7 @@ export default function ProfileSidebar({
     setRightbarOpen(false);
     setShowAccountList(false);
   };
-
+  console.log(channel);
   const otherAccounts =
     savedAccounts?.filter(
       (acc) =>
