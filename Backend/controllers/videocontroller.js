@@ -102,14 +102,6 @@ export const deleteVideo = async (req, res) => {
       });
     }
 
-    if (video.thumbnail) {
-      const thumbPublicId = getCloudinaryPublicIdFromUrl(video.thumbnail);
-
-      if (thumbPublicId) {
-        await cloudinary.uploader.destroy(thumbPublicId);
-      }
-    }
-
     await Comments.deleteMany({ video: video._id });
 
     await video.deleteOne();
