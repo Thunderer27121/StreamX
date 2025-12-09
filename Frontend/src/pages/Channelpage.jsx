@@ -33,12 +33,8 @@ export default function ChannelPage() {
         0
     );
 
-    // ❗❗ SINGLE SOURCE OF TRUTH (no useEffect)
     const isSubscribed = channel?.subscribers?.includes(user?._id) ?? false;
-
-    // useSubscribe uses optimistic UI - perfect
-    const { toggleSubscription, isLoading: issubloading } =
-        useSubscribe(isSubscribed);
+       const { toggleSubscription, isLoading: issubloading } = useSubscribe(isSubscribed);
 
     return (
         <div className="bg-black text-white min-h-screen">
