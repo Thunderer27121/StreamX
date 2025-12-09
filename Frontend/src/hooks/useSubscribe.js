@@ -3,7 +3,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useUser } from "../contexts/usercontext";
 
-export function useSubscribe(isSubscribed, setSubscribed) {
+export function useSubscribe(subscribed, setSubscribed, videoPublicId) {
   const { user } = useUser();
   const queryClient = useQueryClient();
   const currentUserId = user?._id;
@@ -20,76 +20,80 @@ export function useSubscribe(isSubscribed, setSubscribed) {
       });
     },
 
-    // OPTIMISTIC UPDATE for BOTH ChannelPage and VideoPlayer
     onMutate: async ({ channelId, isCurrentlySubscribed }) => {
-      // Cancel both
-      await queryClient.cancelQueries({ queryKey: ["channel", channelId] });
+      // Cancel both queries
       await queryClient.cancelQueries({ queryKey: ["video", user] });
+      await queryClient.cancelQueries({ queryKey: ["video", videoPublicId] });
 
-      // Snapshot previous states
-      const previousChannel = queryClient.getQueryData(["channel", channelId]);
-      const previousVideo = queryClient.getQueryData(["video", user]);
+      const previousList = queryClient.getQueryData(["video", user]);
+      const previousSingle = queryClient.getQueryData(["video", videoPublicId]);
 
-      // Flip UI instantly
+      // UI instant update
       if (setSubscribed) setSubscribed(!isCurrentlySubscribed);
 
-      // 🔥 UPDATE CHANNEL CACHE OPTIMISTICALLY
-      queryClient.setQueryData(["channel", channelId], (old) => {
+      // 🔥 Update ALL videos uploaded by this channel
+      queryClient.setQueryData(["video", user], (old) => {
         if (!old) return old;
-        const alreadySubbed = old.subscribers.includes(currentUserId);
 
-        return {
-          ...old,
-          subscribers: alreadySubbed
-            ? old.subscribers.filter((id) => id !== currentUserId)
-            : [...old.subscribers, currentUserId],
-        };
+        return old.map((v) => {
+          if (v.uploadedBy._id !== channelId) return v;
+
+          const already = v.uploadedBy.subscribers.includes(currentUserId);
+
+          return {
+            ...v,
+            uploadedBy: {
+              ...v.uploadedBy,
+              subscribers: already
+                ? v.uploadedBy.subscribers.filter((id) => id !== currentUserId)
+                : [...v.uploadedBy.subscribers, currentUserId],
+            },
+          };
+        });
       });
 
-      // 🔥 UPDATE VIDEO CACHE OPTIMISTICALLY (if exists)
-      queryClient.setQueryData(["video", user], (old) => {
+      // 🔥 Update SINGLE video data (VideoPlayer)
+      queryClient.setQueryData(["video", videoPublicId], (old) => {
         if (!old || !old.uploadedBy) return old;
-        const alreadySubbed = old.uploadedBy.subscribers.includes(currentUserId);
+
+        const already = old.uploadedBy.subscribers.includes(currentUserId);
 
         return {
           ...old,
           uploadedBy: {
             ...old.uploadedBy,
-            subscribers: alreadySubbed
+            subscribers: already
               ? old.uploadedBy.subscribers.filter((id) => id !== currentUserId)
               : [...old.uploadedBy.subscribers, currentUserId],
           },
         };
       });
 
-      return { previousChannel, previousVideo, channelId };
+      return { previousList, previousSingle };
     },
 
-    // ROLLBACK
-    onError: (err, vars, ctx) => {
+    onError: (_err, _vars, ctx) => {
       if (setSubscribed) setSubscribed((prev) => !prev);
 
-      if (ctx?.previousChannel)
-        queryClient.setQueryData(["channel", ctx.channelId], ctx.previousChannel);
+      if (ctx?.previousList)
+        queryClient.setQueryData(["video", user], ctx.previousList);
 
-      if (ctx?.previousVideo)
-        queryClient.setQueryData(["video", user], ctx.previousVideo);
+      if (ctx?.previousSingle)
+        queryClient.setQueryData(["video", videoPublicId], ctx.previousSingle);
 
       toast.error("Subscription error");
-      console.error("SUBSCRIBE ERROR:", err?.response?.data || err.message);
     },
 
-    // REFETCH TRUTH DATA
-    onSettled: (_d, _e, { channelId }) => {
-      queryClient.invalidateQueries({ queryKey: ["channel", channelId] });
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["video", user] });
+      queryClient.invalidateQueries({ queryKey: ["video", videoPublicId] });
     },
   });
 
   const toggleSubscription = (channelId) => {
     mutation.mutate({
       channelId,
-      isCurrentlySubscribed: isSubscribed,
+      isCurrentlySubscribed: subscribed,
     });
   };
 

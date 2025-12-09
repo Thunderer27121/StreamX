@@ -34,7 +34,11 @@ export default function ChannelPage() {
     );
 
     const isSubscribed = channel?.subscribers?.includes(user?._id) ?? false;
-       const { toggleSubscription, isLoading: issubloading } = useSubscribe(isSubscribed);
+       const { toggleSubscription } = useSubscribe(
+  isSubscribed,
+  null,        
+  null         
+);
 
     return (
         <div className="bg-black text-white min-h-screen">

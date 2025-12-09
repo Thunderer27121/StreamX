@@ -31,7 +31,11 @@ const publicId = params.get("publicId");
     isLoading
   } = useVideoData(publicId, user?._id);
 
-  const { toggleSubscription , isLoading : issubloading} = useSubscribe(subscribed,setSubscribed);
+  const { toggleSubscription, isLoading  : issubloading } = useSubscribe(
+  subscribed,
+  setSubscribed,
+  publicId   
+);
   const { toggleLike, toggleDislike } = useLikeDislike(
     video,
     user?._id,
