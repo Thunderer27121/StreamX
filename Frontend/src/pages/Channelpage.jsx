@@ -129,9 +129,9 @@ export default function ChannelPage() {
                                                     )}
 
                                                 <Share
-                                                    url={`${window.location.origin}/channel/${Channel._id}`}
-                                                    title={Channel.name}
-                                                    text={`Check out ${Channel.name}'s channel!`}
+                                                    url={`${window.location.origin}/channel/${Channel?._id}`}
+                                                    title={Channel?.name}
+                                                    text={`Check out ${Channel?.name}'s channel!`}
                                                     className="hover:scale-105 border border-zinc-700"
                                                 />
                                             </div>

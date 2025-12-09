@@ -22,17 +22,15 @@ export function useSubscribe(subscribed, setSubscribed, videoPublicId) {
 
     onMutate: async ({ channelId, isCurrentlySubscribed }) => {
       // Cancel both queries
-      await queryClient.cancelQueries({ queryKey: ["video", user] });
+      await queryClient.cancelQueries({ queryKey: ["video", user?._id] });
       await queryClient.cancelQueries({ queryKey: ["video", videoPublicId] });
 
-      const previousList = queryClient.getQueryData(["video", user]);
+      const previousList = queryClient.getQueryData(["video", user?._id]);
       const previousSingle = queryClient.getQueryData(["video", videoPublicId]);
 
-      // UI instant update
       if (setSubscribed) setSubscribed(!isCurrentlySubscribed);
 
-      // 🔥 Update ALL videos uploaded by this channel
-      queryClient.setQueryData(["video", user], (old) => {
+      queryClient.setQueryData(["video", user?._id], (old) => {
         if (!old) return old;
 
         return old.map((v) => {
@@ -52,7 +50,6 @@ export function useSubscribe(subscribed, setSubscribed, videoPublicId) {
         });
       });
 
-      // 🔥 Update SINGLE video data (VideoPlayer)
       queryClient.setQueryData(["video", videoPublicId], (old) => {
         if (!old || !old.uploadedBy) return old;
 
@@ -76,7 +73,7 @@ export function useSubscribe(subscribed, setSubscribed, videoPublicId) {
       if (setSubscribed) setSubscribed((prev) => !prev);
 
       if (ctx?.previousList)
-        queryClient.setQueryData(["video", user], ctx.previousList);
+        queryClient.setQueryData(["video", user?._id], ctx.previousList);
 
       if (ctx?.previousSingle)
         queryClient.setQueryData(["video", videoPublicId], ctx.previousSingle);
@@ -85,7 +82,7 @@ export function useSubscribe(subscribed, setSubscribed, videoPublicId) {
     },
 
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["video", user] });
+      queryClient.invalidateQueries({ queryKey: ["video", user?._id] });
       queryClient.invalidateQueries({ queryKey: ["video", videoPublicId] });
     },
   });

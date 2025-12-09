@@ -8,7 +8,7 @@ const videocontext = createContext();
 export const VideoProvider = ({ children }) => {
     const { user } = useUser();
     const {data , isLoading, isError , error} = useQuery({
-        queryKey : ['video', user],
+        queryKey : ['video', user?._id],
         queryFn : async () => {
         const response = await axios.get(`${import.meta.env.VITE_api_base_url}/api/dbvideo/getall`);
         const videoResponse = response.data.videos;
