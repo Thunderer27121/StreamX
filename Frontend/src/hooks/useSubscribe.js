@@ -6,7 +6,7 @@ import { useUser } from "../contexts/usercontext";
 export function useSubscribe(subscribed, setSubscribed,) {
   const { user } = useUser();
   const queryClient = useQueryClient();
-  const currentUserId = user?._id || user?.googleId;
+  const currentUserId = user?._id;
 
   const mutation = useMutation({
     mutationFn: async ({ channelId }) => {
