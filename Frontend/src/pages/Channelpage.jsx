@@ -44,7 +44,7 @@ export default function ChannelPage() {
         }
     }, [Channel, user?._id]);
 
-    const { toggleSubscription } = useSubscribe(subscribed, setSubscribed);
+    const { toggleSubscription, isLoading: issubloading } = useSubscribe(subscribed,setSubscribed);
 
     return (
         <div className="bg-black text-white min-h-screen">
@@ -136,8 +136,9 @@ export default function ChannelPage() {
                                                 {/* Subscribe only if logged in and not own channel */}
                                                 {user?._id && (channel?.message || channel?._id !== channelId) && (
                                                     <button
+                                                    disabled={issubloading}
                                                         onClick={() =>
-                                                            toggleSubscription(user._id, Channel._id)  
+                                                            toggleSubscription(Channel._id)  
                                                         }
                                                         className={`group relative px-8 py-3 rounded-full font-bold transition-all duration-300 hover:scale-105 hover:shadow-xl flex items-center gap-2 ${subscribed
                                                                 ? "bg-zinc-800 text-white hover:bg-zinc-700"

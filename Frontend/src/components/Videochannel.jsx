@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Bell } from "lucide-react";
 
-export default function VideoChannel({ video, subscribed, toggleSubscription, user }) {
+export default function VideoChannel({ isloading ,video, subscribed, toggleSubscription, user }) {
   return (
     <div className="mt-4 w-full">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -22,6 +22,7 @@ export default function VideoChannel({ video, subscribed, toggleSubscription, us
         {/* Subscribe button */}
         {video?.uploadedBy.googleId !== user?.googleId && (
           <motion.button
+          disabled={isloading}
             onClick={toggleSubscription}
             className={`w-full sm:w-auto px-5 py-2 sm:px-8 sm:py-3 rounded-full font-semibold
               flex items-center justify-center gap-2 text-sm sm:text-base
