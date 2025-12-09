@@ -12,7 +12,7 @@ const queryclient = new QueryClient();
 
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>
-    <GoogleOAuthProvider clientId='684737376615-5836grvk717k69bl55m9lt5fp57uprmk.apps.googleusercontent.com'>
+    <GoogleOAuthProvider clientId={`${import.meta.env.VITE_client_id}`}>
       <ToastContainer position='top-center' />
       <UserProvider>
        <QueryClientProvider client={queryclient}>

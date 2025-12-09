@@ -10,7 +10,7 @@ export function useViews(video, userId) {
       });
     }
     queryclient.invalidateQueries({
-        queryKey: ["channel", user?.googleId],
+        queryKey: ["video", video?.publicId],
       });
   };
 
