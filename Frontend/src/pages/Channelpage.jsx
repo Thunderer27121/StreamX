@@ -33,7 +33,7 @@ export default function ChannelPage() {
         0
     );
 
-    const isSubscribed = channel?.subscribers?.includes(user?._id) ?? false;
+    const isSubscribed = Channel?.subscribers?.includes(user?._id) ?? false;
        const { toggleSubscription, isLoading  :issubloading } = useSubscribe(
   isSubscribed,
   null,        
@@ -44,7 +44,7 @@ export default function ChannelPage() {
         <div className="bg-black text-white min-h-screen">
             <div className="max-w-7xl mx-auto">
                 {/* CHANNEL HEADER */}
-                {channel ? (
+                {Channel ? (
                     <div className="mb-8">
                         <div className="relative h-56 sm:h-64 md:h-80 overflow-hidden">
                             <div className="absolute inset-0 bg-gradient-to-br from-violet-600 via-fuchsia-500 to-orange-500 animate-gradient"></div>
@@ -73,7 +73,7 @@ export default function ChannelPage() {
                                                 <div>
                                                     <div className="flex items-center justify-center md:justify-start gap-2 mb-3">
                                                         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-white via-zinc-100 to-zinc-400 bg-clip-text text-transparent">
-                                                            {Channel.name}
+                                                            {Channel?.name}
                                                         </h1>
                                                         <CheckCircle2 className="w-7 h-7 text-white fill-blue-400 flex-shrink-0" />
                                                     </div>
@@ -82,7 +82,7 @@ export default function ChannelPage() {
                                                         <div className="flex items-center gap-2 bg-zinc-800/50 px-4 py-2 rounded-full">
                                                             <Users className="w-4 h-4 text-pink-400" />
                                                             <span className="font-bold text-white">
-                                                                {(channel.subscribers?.length || 0).toLocaleString()}
+                                                                {(Channel?.subscribers?.length || 0).toLocaleString()}
                                                             </span>
                                                             <span className="text-zinc-400">subscribers</span>
                                                         </div>
