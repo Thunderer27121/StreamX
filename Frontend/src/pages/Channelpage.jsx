@@ -34,7 +34,7 @@ export default function ChannelPage() {
     );
 
     const isSubscribed = channel?.subscribers?.includes(user?._id) ?? false;
-       const { toggleSubscription } = useSubscribe(
+       const { toggleSubscription, isLoading  :issubloading } = useSubscribe(
   isSubscribed,
   null,        
   null         
