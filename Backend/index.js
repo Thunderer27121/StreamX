@@ -11,6 +11,7 @@ import viewRoute from "./routes/viewRoute.js";
 import likeroute from "./routes/likesroute.js";
 import commentRoute from "./routes/commentRoutes.js";
 import channelUpdateRoute from "./routes/channelUpdate.js";
+import compression from "compression";
 
 dotenv.config();
 
@@ -18,9 +19,14 @@ const app = express();
 app.use(express.json());
 
 app.use(cors({
-  origin: "https://stream-x-mu.vercel.app", 
+  origin: `${process.env.origin}`, 
   credentials: true
 }));
+app.use(compression());
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Max-Age", "86400"); 
+  next();
+});
 
 
 await dbConnect();
@@ -41,4 +47,5 @@ app.use("/api/channels",channelUpdateRoute);
 
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Backend running on port ${PORT}`));
+const server = app.listen(PORT, () => console.log(`Backend running on port ${PORT}`));
+server.keepAliveTimeout = 65000;
