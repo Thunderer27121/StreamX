@@ -21,7 +21,7 @@ export function useDeleteVideo() {
     },
     onSuccess: () => {
 
-      queryClient.invalidateQueries({ queryKey: ["video"] });
+      queryClient.invalidateQueries({ queryKey: ["video",user?._id] });
 
       if (user?.googleId) {
         queryClient.invalidateQueries({

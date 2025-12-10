@@ -21,7 +21,6 @@ export function useSubscribe(subscribed, setSubscribed, videoPublicId) {
     },
 
     onMutate: async ({ channelId, isCurrentlySubscribed }) => {
-      // Cancel both queries
       await queryClient.cancelQueries({ queryKey: ["video", user?._id] });
       await queryClient.cancelQueries({ queryKey: ["video", videoPublicId] });
 
