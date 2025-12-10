@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 export function useLikeDislike(video, userId, liked, setLiked, disliked, setDisliked) {
   const queryClient = useQueryClient();
   const baseUrl = import.meta.env.VITE_api_base_url;
-  const videoId = video?._id;
+  const videoId = video?.publicId;
 
   const likeMutation = useMutation({
     mutationFn: async ({ liked }) => {
