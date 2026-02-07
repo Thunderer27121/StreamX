@@ -16,7 +16,6 @@ export function useVideoData(id, userId) {
       return res.data;
     },
     enabled: !!id,
-    refetchInterval: 500
   });
 
   useEffect(() => {

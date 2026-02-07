@@ -19,8 +19,7 @@ export default function Comments({ videoId, user, videoChannelId, googleId }) {
   } = useComments(videoId);
 
   const { mutate: addComment, isPending: isAdding } = useAddComment(videoId);
-  const { mutate: deleteComment, isPending: isDeleting } =
-    useDeleteComment(videoId);
+  const { mutate: deleteComment, isPending: isDeleting } = useDeleteComment(videoId);
 
   const handleAddComment = () => {
     if (!comment.trim()) return;
@@ -123,8 +122,10 @@ export default function Comments({ videoId, user, videoChannelId, googleId }) {
                 animate={{ opacity: 1, y: 0 }}
               >
                 <img
-                  src={`${c?.user_avatar}`}
+                  src={`${import.meta.env.VITE_api_base_url}/api/auth/profile-pfp/${c?.user?._id}`}
                   alt={c.user_name}
+                  loading="lazy"
+                  decoding="async"
                   className="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex-shrink-0"
                 />
 

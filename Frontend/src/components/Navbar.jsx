@@ -11,8 +11,8 @@ export default function Navbar({ sidebarOpen, setSidebarOpen, setRightbarOpen })
     const handleSearch = () => {
         const q = searchValue.trim();
         if (!q) return;
-        console.log("function is running");
         navigate(`/search?q=${encodeURIComponent(q)}`);
+        setSearchValue("");
     };
 
     return (

@@ -21,15 +21,15 @@ export function useSubscribe(subscribed, setSubscribed, videoPublicId) {
     },
 
     onMutate: async ({ channelId, isCurrentlySubscribed }) => {
-      await queryClient.cancelQueries({ queryKey: ["video", user?._id] });
+      await queryClient.cancelQueries({ queryKey: ["videos", user?._id] });
       await queryClient.cancelQueries({ queryKey: ["video", videoPublicId] });
 
-      const previousList = queryClient.getQueryData(["video", user?._id]);
+      const previousList = queryClient.getQueryData(["videos", user?._id]);
       const previousSingle = queryClient.getQueryData(["video", videoPublicId]);
 
       if (setSubscribed) setSubscribed(!isCurrentlySubscribed);
 
-      queryClient.setQueryData(["video", user?._id], (old) => {
+      queryClient.setQueryData(["videos", user?._id], (old) => {
         if (!old) return old;
 
         return old.map((v) => {

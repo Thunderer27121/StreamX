@@ -12,7 +12,7 @@ export function useAddComment(videoId) {
       );
       return res.data.comment;
     },
-    onSuccess: (savedComment) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["comments", videoId] });
     },
   });

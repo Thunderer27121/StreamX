@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext } from 'react'
 import { useUser } from './usercontext.jsx';
 import { useQuery } from '@tanstack/react-query';
 
@@ -7,8 +7,8 @@ import { useQuery } from '@tanstack/react-query';
 const videocontext = createContext();
 export const VideoProvider = ({ children }) => {
     const { user } = useUser();
-    const {data , isLoading, isError , error} = useQuery({
-        queryKey : ['video', user?._id],
+    const {data , isLoading, isError , error, refetch} = useQuery({
+        queryKey : ['videos', user?._id],
         queryFn : async () => {
         const response = await axios.get(`${import.meta.env.VITE_api_base_url}/api/dbvideo/getall`);
         const videoResponse = response.data.videos;
@@ -16,15 +16,17 @@ export const VideoProvider = ({ children }) => {
         console.log(statusResponse);
         return videoResponse;
     },
-    refetchInterval : 2000
+    refetchOnMount : true,
 })
     
 
     return (
-        <videocontext.Provider value={{Videos : data, isLoading, isError , error}}>
+        <videocontext.Provider value={{Videos : data, isLoading, isError , error, refetch}}>
             { children}
         </videocontext.Provider>
     )
 }
 
-export const useVideo = ()=> useContext(videocontext);
+const useVideo = ()=> useContext(videocontext);
+
+export { useVideo };

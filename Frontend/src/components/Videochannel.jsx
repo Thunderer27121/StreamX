@@ -8,7 +8,7 @@ export default function VideoChannel({ isloading ,video, subscribed, toggleSubsc
         {/* Channel info */}
         <div className="flex items-center gap-3 text-white">
           <img
-            src={video?.uploadedBy.profilePictureUrl}
+            src={`${import.meta.env.VITE_api_base_url}/api/auth/profile-pfp/${video?.uploadedBy.googleId}`}
             className="w-12 h-12 rounded-full"
           />
           <div>

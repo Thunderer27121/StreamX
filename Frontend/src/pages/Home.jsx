@@ -4,9 +4,12 @@ import { useVideo } from "../contexts/videocontext.jsx";
 import { Loader2, AlertCircle, VideoOff } from "lucide-react";
 
 export default function Home() {
-  const { Videos, isLoading, isError, error } = useVideo();
+  
+  const { Videos, isLoading, isError, error ,refetch } = useVideo();
   const { category } = useParams(); 
-
+ if(location.pathname === "/"){
+  refetch();
+ }
   let filteredVideos = Videos || [];
   let selectedLabel = "All";
 

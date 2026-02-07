@@ -3,11 +3,11 @@ import { Video } from "../models/videomodal.js";
 export async function liked(req, res){
   try {
     const {userId , videoId} = req.query;
-    const video = await Video.findById(videoId);
+    const video = await Video.findOne({publicId: videoId});
     if(!video){
         return res.status(404).json({message: "video not found"});
     }
-    const likeuser = await video.likes.find((id)=>id.toString === userId);
+    const likeuser = await video.likes.find((id)=>id.toString() === userId);
     if(likeuser){
         return res.status(200).json({message : "already liked"}); 
     }
@@ -23,7 +23,7 @@ export async function liked(req, res){
 export async function likeremoved(req , res){
    try {
      const {userId , videoId} = req.query;
-    const video = await Video.findById(videoId);
+    const video = await Video.findOne({publicId: videoId});
     if(!video){
         return res.status(404).json({message : "video not found"});
     }
@@ -38,11 +38,11 @@ export async function likeremoved(req , res){
 export async function disliked(req, res){
      try {
     const {userId , videoId} = req.query;
-    const video = await Video.findById(videoId);
+    const video = await Video.findOne({publicId: videoId});
     if(!video){
         return res.status(404).json({message: "video not found"});
     }
-    const dislikeuser = await video.dislikes.find((id)=>id.toString === userId);
+    const dislikeuser = await video.dislikes.find((id)=>id.toString() === userId);
     if(dislikeuser){
         return res.status(200).json({message : "already disliked"}); 
     }
@@ -58,7 +58,7 @@ export async function disliked(req, res){
 export async function dislikeremoved(req,res){
     try {
      const {userId , videoId} = req.query;
-    const video = await Video.findById(videoId);
+    const video = await Video.findOne({publicId: videoId});
     if(!video){
         return res.status(404).json({message : "video not found"});
     }

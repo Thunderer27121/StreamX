@@ -1,6 +1,7 @@
 import { redis } from "../db/redis.js";
 import { User} from "../models/userModal.js";
 import fetch from "node-fetch";
+import mongoose from "mongoose";
 
 
  export async function loggin(req, res) {
@@ -10,7 +11,7 @@ import fetch from "node-fetch";
       code,
       client_id: process.env.google_client_id,
       client_secret: process.env.google_client_secret,
-      redirect_uri: "https://stream-x-mu.vercel.app", // your frontend URL
+      redirect_uri: "https://stream-x-mu.vercel.app", 
       grant_type: "authorization_code",
     });
 
@@ -70,7 +71,13 @@ import fetch from "node-fetch";
 
 export async function getpfp(req, res) {
   try {
-    const user = await User.findById(req.params.id);
+    const { id } = req.params;
+
+const user = await User.findOne(
+  mongoose.Types.ObjectId.isValid(id)
+    ? { _id: id }
+    : { googleId: id }
+);
     if (!user || !user.picture) {
       return res.status(404).send("User or picture not found");
     }

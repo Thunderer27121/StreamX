@@ -14,7 +14,7 @@ export function useShare() {
         return { success: true, message: "Link copied to clipboard!" };
       }
     } catch (error) {
-      return { success: false, message: "Share canceled or failed." };
+      return { success: false, message: error.message || "Failed to share content." };
     }
   };
 
